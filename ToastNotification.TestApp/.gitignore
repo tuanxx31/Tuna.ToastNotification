@@ -4,3 +4,5 @@
 /ToastNotification.TestApp/ToastNotification.TestApp.csproj.vspscc
 /ToastNotification.TestApp/ToastNotification.TestApp.csproj.vssscc
 /ToastNotification.TestApp/ToastNotification.TestApp.csproj.vssscc
+/bin/
+/obj/
