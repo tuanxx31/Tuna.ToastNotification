@@ -9,8 +9,8 @@ namespace Tuna.ToastNotification.Services
     public class ToastService
     {
         private static Toast _currentToast = null;
-        private static readonly Queue<Toast> _toastQueue = new Queue<Toast>();
-        private static bool _isDisplaying = false;
+        private static readonly List<Toast> _activeToasts = new List<Toast>();
+        private static bool _isInitialized = false;
 
         public static void ShowToast(string message,
                                      ToastType type = ToastType.Info,
@@ -21,20 +21,36 @@ namespace Tuna.ToastNotification.Services
         {
             Application.Current.Dispatcher.Invoke(() =>
             {
-                // 1. Đóng Toast đang hiển thị
+                // Khởi tạo listener khi thoát ứng dụng (chỉ 1 lần)
+                if (!_isInitialized)
+                {
+                    Application.Current.Exit += (s, e) =>
+                    {
+                        foreach (var t in _activeToasts.ToArray())
+                        {
+                            t.Close();
+                        }
+                        _activeToasts.Clear();
+                    };
+                    _isInitialized = true;
+                }
+
+                // Đóng toast hiện tại nếu còn
                 _currentToast?.Close();
 
-                // 2. Xóa queue cũ
-                _toastQueue.Clear();
+                // Tạo mới toast
+                var toast = new Toast(message, type, mode, duration, maxWidth, toastPosition)
+                {
+                    Owner = Application.Current.MainWindow
+                };
 
-                // 3. Tạo và hiển thị Toast mới ngay
-                var toast = new Toast(message, type, mode, duration, maxWidth, toastPosition);
+                _activeToasts.Add(toast);
+                toast.Closed += (s, e) => _activeToasts.Remove(toast);
+
                 _currentToast = toast;
-                _isDisplaying = true;
-
                 toast.Show();
 
-                // 4. Bắt đầu quá trình đóng sau thời gian hiển thị
+                // Tự xóa trạng thái sau khi hết thời gian
                 _ = Task.Run(async () =>
                 {
                     await Task.Delay(duration + 400);
@@ -43,7 +59,6 @@ namespace Tuna.ToastNotification.Services
                         if (_currentToast == toast)
                         {
                             _currentToast = null;
-                            _isDisplaying = false;
                         }
                     });
                 });
