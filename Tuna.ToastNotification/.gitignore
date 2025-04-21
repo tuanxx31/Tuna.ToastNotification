@@ -1,7 +1,68 @@
-/bin
-/obj
-/packages
-/src/Test
-/src/Test
-/src/Test
-/src/Test
+## Build results
+bin/
+obj/
+[Bb]uild/
+[Bb]uilds/
+
+## User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.vcxproj.user
+
+## Mono Auto Generated Files
+mono_crash.*
+
+## Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+## Visual Studio files
+.vscode/
+.vs/
+*.code-workspace
+
+## NuGet
+*.nupkg
+# The packages folder can be ignored because of PackageReference
+packages/
+*.snupkg
+project.lock.json
+project.assets.json
+*.nuget.props
+*.nuget.targets
+
+## ClickOnce publish
+publish/
+
+## Web Deploy
+*.Publish.xml
+
+## Roslyn
+*.ide
+
+## Backup & Logs
+*.bak
+*.log
+
+## Others
+_ReSharper*/
+*.DotSettings.user
+TestResults/
+*.vspscc
+*.vssscc
+*.pfx
+*.cer
+*.orig
+
+# DotCover
+.idea/
+*.dotCover
+
+# Rider
+.idea/
+
+# Rider system files
+.idea/
+*.sln.iml
